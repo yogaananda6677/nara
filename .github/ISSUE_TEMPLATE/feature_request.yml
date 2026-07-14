@@ -1,0 +1,45 @@
+name: Feature request
+description: Usulkan fitur atau peningkatan yang terukur.
+title: "feat: "
+labels: [enhancement, needs-triage]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Masalah pengguna
+      description: Jelaskan masalah, bukan hanya solusi yang diinginkan.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Solusi yang diusulkan
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Foundation dan security
+        - Keuangan
+        - Produktivitas
+        - Assistant lokal
+        - Smart Scan
+        - CI/CD dan dokumentasi
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: Gunakan checklist yang dapat diuji.
+    validations:
+      required: true
+  - type: checkboxes
+    id: offline
+    attributes:
+      label: Scope V1
+      options:
+        - label: Usulan ini dapat berjalan tanpa backend/API online, atau sudah dijelaskan sebagai backlog V2.
+          required: true

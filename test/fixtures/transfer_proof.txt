@@ -1,0 +1,7 @@
+TRANSFER BERHASIL
+14/07/2026 10:15
+Penerima: BUDI SANTOSO
+Bank Tujuan BCA
+Nomor Referensi 1234567890
+Nominal Rp 250.000
+Biaya Admin Rp 2.500

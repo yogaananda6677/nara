@@ -1,0 +1,59 @@
+name: Bug report
+description: Laporkan perilaku yang salah dan dapat direproduksi.
+title: "bug: "
+labels: [bug, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: Terima kasih. Jangan sertakan database, struk, screenshot, atau data pribadi nyata.
+  - type: input
+    id: version
+    attributes:
+      label: Versi atau commit
+      placeholder: 1.0.0+1 atau commit SHA
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Perangkat dan Android
+      placeholder: Infinix X6882, Android 15
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Langkah reproduksi
+      placeholder: Tulis langkah bernomor dan gunakan data anonim.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Hasil yang diharapkan
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Hasil aktual
+    validations:
+      required: true
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: Frekuensi
+      options:
+        - Selalu
+        - Sering
+        - Kadang
+        - Sekali
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Pemeriksaan privasi
+      options:
+        - label: Saya sudah menghapus data pribadi dan credential dari laporan ini.
+          required: true

@@ -1,0 +1,70 @@
+name: Android Test Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-test-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build Android test release
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run quality gate
+        run: |
+          dart format --output=none --set-exit-if-changed lib test
+          flutter analyze
+          flutter test
+
+      - name: Build debug-signed APK
+        run: flutter build apk --debug --no-pub
+
+      - name: Prepare artifact
+        run: cp build/app/outputs/flutter-apk/app-debug.apk "nara-${GITHUB_REF_NAME}-android-debug.apk"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: nara-${{ github.ref_name }}-android-debug
+          path: nara-${{ github.ref_name }}-android-debug.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Create or update GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" "nara-${GITHUB_REF_NAME}-android-debug.apk" --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" "nara-${GITHUB_REF_NAME}-android-debug.apk#Android debug-signed test APK" --generate-notes --prerelease --title "Nara ${GITHUB_REF_NAME}"
+          fi

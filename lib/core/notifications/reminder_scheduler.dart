@@ -31,7 +31,7 @@ class LocalReminderScheduler implements ReminderScheduler {
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Jakarta'));
     await _plugin.initialize(
-      const InitializationSettings(
+      settings: const InitializationSettings(
         android: AndroidInitializationSettings('ic_stat_nara'),
       ),
     );
@@ -57,11 +57,11 @@ class LocalReminderScheduler implements ReminderScheduler {
     }
     final localTime = tz.TZDateTime.from(scheduledAt, tz.local);
     await _plugin.zonedSchedule(
-      _notificationId(targetType, targetId),
-      targetType == 'task' ? 'Pengingat task' : 'Pengingat jadwal',
-      title,
-      localTime,
-      const NotificationDetails(
+      id: _notificationId(targetType, targetId),
+      title: targetType == 'task' ? 'Pengingat task' : 'Pengingat jadwal',
+      body: title,
+      scheduledDate: localTime,
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           'nara_reminders',
           'Pengingat Nara',
@@ -84,7 +84,7 @@ class LocalReminderScheduler implements ReminderScheduler {
   @override
   Future<void> cancel(String targetType, String targetId) async {
     await _initialize();
-    await _plugin.cancel(_notificationId(targetType, targetId));
+    await _plugin.cancel(id: _notificationId(targetType, targetId));
   }
 
   int _notificationId(String type, String id) =>

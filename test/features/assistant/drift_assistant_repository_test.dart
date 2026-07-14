@@ -28,7 +28,7 @@ void main() {
     await repository.saveMessage(message);
     final stored = await repository.loadMessages();
 
-    expect(database.schemaVersion, 5);
+    expect(database.schemaVersion, 6);
     expect(stored.single.content, message.content);
     expect(stored.single.role, domain.AssistantRole.user);
   });

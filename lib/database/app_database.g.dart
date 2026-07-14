@@ -7370,6 +7370,483 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   }
 }
 
+class $SecurityCredentialsTable extends SecurityCredentials
+    with TableInfo<$SecurityCredentialsTable, SecurityCredential> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SecurityCredentialsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _pinHashMeta = const VerificationMeta(
+    'pinHash',
+  );
+  @override
+  late final GeneratedColumn<String> pinHash = GeneratedColumn<String>(
+    'pin_hash',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _pinSaltMeta = const VerificationMeta(
+    'pinSalt',
+  );
+  @override
+  late final GeneratedColumn<String> pinSalt = GeneratedColumn<String>(
+    'pin_salt',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kdfIterationsMeta = const VerificationMeta(
+    'kdfIterations',
+  );
+  @override
+  late final GeneratedColumn<int> kdfIterations = GeneratedColumn<int>(
+    'kdf_iterations',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _failedAttemptsMeta = const VerificationMeta(
+    'failedAttempts',
+  );
+  @override
+  late final GeneratedColumn<int> failedAttempts = GeneratedColumn<int>(
+    'failed_attempts',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _lockedUntilMeta = const VerificationMeta(
+    'lockedUntil',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lockedUntil = GeneratedColumn<DateTime>(
+    'locked_until',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: _utcNow,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    pinHash,
+    pinSalt,
+    kdfIterations,
+    failedAttempts,
+    lockedUntil,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'security_credentials';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SecurityCredential> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('pin_hash')) {
+      context.handle(
+        _pinHashMeta,
+        pinHash.isAcceptableOrUnknown(data['pin_hash']!, _pinHashMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_pinHashMeta);
+    }
+    if (data.containsKey('pin_salt')) {
+      context.handle(
+        _pinSaltMeta,
+        pinSalt.isAcceptableOrUnknown(data['pin_salt']!, _pinSaltMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_pinSaltMeta);
+    }
+    if (data.containsKey('kdf_iterations')) {
+      context.handle(
+        _kdfIterationsMeta,
+        kdfIterations.isAcceptableOrUnknown(
+          data['kdf_iterations']!,
+          _kdfIterationsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_kdfIterationsMeta);
+    }
+    if (data.containsKey('failed_attempts')) {
+      context.handle(
+        _failedAttemptsMeta,
+        failedAttempts.isAcceptableOrUnknown(
+          data['failed_attempts']!,
+          _failedAttemptsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('locked_until')) {
+      context.handle(
+        _lockedUntilMeta,
+        lockedUntil.isAcceptableOrUnknown(
+          data['locked_until']!,
+          _lockedUntilMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SecurityCredential map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SecurityCredential(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      pinHash: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pin_hash'],
+      )!,
+      pinSalt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pin_salt'],
+      )!,
+      kdfIterations: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}kdf_iterations'],
+      )!,
+      failedAttempts: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}failed_attempts'],
+      )!,
+      lockedUntil: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}locked_until'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $SecurityCredentialsTable createAlias(String alias) {
+    return $SecurityCredentialsTable(attachedDatabase, alias);
+  }
+}
+
+class SecurityCredential extends DataClass
+    implements Insertable<SecurityCredential> {
+  final String id;
+  final String pinHash;
+  final String pinSalt;
+  final int kdfIterations;
+  final int failedAttempts;
+  final DateTime? lockedUntil;
+  final DateTime updatedAt;
+  const SecurityCredential({
+    required this.id,
+    required this.pinHash,
+    required this.pinSalt,
+    required this.kdfIterations,
+    required this.failedAttempts,
+    this.lockedUntil,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['pin_hash'] = Variable<String>(pinHash);
+    map['pin_salt'] = Variable<String>(pinSalt);
+    map['kdf_iterations'] = Variable<int>(kdfIterations);
+    map['failed_attempts'] = Variable<int>(failedAttempts);
+    if (!nullToAbsent || lockedUntil != null) {
+      map['locked_until'] = Variable<DateTime>(lockedUntil);
+    }
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  SecurityCredentialsCompanion toCompanion(bool nullToAbsent) {
+    return SecurityCredentialsCompanion(
+      id: Value(id),
+      pinHash: Value(pinHash),
+      pinSalt: Value(pinSalt),
+      kdfIterations: Value(kdfIterations),
+      failedAttempts: Value(failedAttempts),
+      lockedUntil: lockedUntil == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lockedUntil),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory SecurityCredential.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SecurityCredential(
+      id: serializer.fromJson<String>(json['id']),
+      pinHash: serializer.fromJson<String>(json['pinHash']),
+      pinSalt: serializer.fromJson<String>(json['pinSalt']),
+      kdfIterations: serializer.fromJson<int>(json['kdfIterations']),
+      failedAttempts: serializer.fromJson<int>(json['failedAttempts']),
+      lockedUntil: serializer.fromJson<DateTime?>(json['lockedUntil']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'pinHash': serializer.toJson<String>(pinHash),
+      'pinSalt': serializer.toJson<String>(pinSalt),
+      'kdfIterations': serializer.toJson<int>(kdfIterations),
+      'failedAttempts': serializer.toJson<int>(failedAttempts),
+      'lockedUntil': serializer.toJson<DateTime?>(lockedUntil),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  SecurityCredential copyWith({
+    String? id,
+    String? pinHash,
+    String? pinSalt,
+    int? kdfIterations,
+    int? failedAttempts,
+    Value<DateTime?> lockedUntil = const Value.absent(),
+    DateTime? updatedAt,
+  }) => SecurityCredential(
+    id: id ?? this.id,
+    pinHash: pinHash ?? this.pinHash,
+    pinSalt: pinSalt ?? this.pinSalt,
+    kdfIterations: kdfIterations ?? this.kdfIterations,
+    failedAttempts: failedAttempts ?? this.failedAttempts,
+    lockedUntil: lockedUntil.present ? lockedUntil.value : this.lockedUntil,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  SecurityCredential copyWithCompanion(SecurityCredentialsCompanion data) {
+    return SecurityCredential(
+      id: data.id.present ? data.id.value : this.id,
+      pinHash: data.pinHash.present ? data.pinHash.value : this.pinHash,
+      pinSalt: data.pinSalt.present ? data.pinSalt.value : this.pinSalt,
+      kdfIterations: data.kdfIterations.present
+          ? data.kdfIterations.value
+          : this.kdfIterations,
+      failedAttempts: data.failedAttempts.present
+          ? data.failedAttempts.value
+          : this.failedAttempts,
+      lockedUntil: data.lockedUntil.present
+          ? data.lockedUntil.value
+          : this.lockedUntil,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SecurityCredential(')
+          ..write('id: $id, ')
+          ..write('pinHash: $pinHash, ')
+          ..write('pinSalt: $pinSalt, ')
+          ..write('kdfIterations: $kdfIterations, ')
+          ..write('failedAttempts: $failedAttempts, ')
+          ..write('lockedUntil: $lockedUntil, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    pinHash,
+    pinSalt,
+    kdfIterations,
+    failedAttempts,
+    lockedUntil,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SecurityCredential &&
+          other.id == this.id &&
+          other.pinHash == this.pinHash &&
+          other.pinSalt == this.pinSalt &&
+          other.kdfIterations == this.kdfIterations &&
+          other.failedAttempts == this.failedAttempts &&
+          other.lockedUntil == this.lockedUntil &&
+          other.updatedAt == this.updatedAt);
+}
+
+class SecurityCredentialsCompanion extends UpdateCompanion<SecurityCredential> {
+  final Value<String> id;
+  final Value<String> pinHash;
+  final Value<String> pinSalt;
+  final Value<int> kdfIterations;
+  final Value<int> failedAttempts;
+  final Value<DateTime?> lockedUntil;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const SecurityCredentialsCompanion({
+    this.id = const Value.absent(),
+    this.pinHash = const Value.absent(),
+    this.pinSalt = const Value.absent(),
+    this.kdfIterations = const Value.absent(),
+    this.failedAttempts = const Value.absent(),
+    this.lockedUntil = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SecurityCredentialsCompanion.insert({
+    required String id,
+    required String pinHash,
+    required String pinSalt,
+    required int kdfIterations,
+    this.failedAttempts = const Value.absent(),
+    this.lockedUntil = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       pinHash = Value(pinHash),
+       pinSalt = Value(pinSalt),
+       kdfIterations = Value(kdfIterations);
+  static Insertable<SecurityCredential> custom({
+    Expression<String>? id,
+    Expression<String>? pinHash,
+    Expression<String>? pinSalt,
+    Expression<int>? kdfIterations,
+    Expression<int>? failedAttempts,
+    Expression<DateTime>? lockedUntil,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (pinHash != null) 'pin_hash': pinHash,
+      if (pinSalt != null) 'pin_salt': pinSalt,
+      if (kdfIterations != null) 'kdf_iterations': kdfIterations,
+      if (failedAttempts != null) 'failed_attempts': failedAttempts,
+      if (lockedUntil != null) 'locked_until': lockedUntil,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SecurityCredentialsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? pinHash,
+    Value<String>? pinSalt,
+    Value<int>? kdfIterations,
+    Value<int>? failedAttempts,
+    Value<DateTime?>? lockedUntil,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return SecurityCredentialsCompanion(
+      id: id ?? this.id,
+      pinHash: pinHash ?? this.pinHash,
+      pinSalt: pinSalt ?? this.pinSalt,
+      kdfIterations: kdfIterations ?? this.kdfIterations,
+      failedAttempts: failedAttempts ?? this.failedAttempts,
+      lockedUntil: lockedUntil ?? this.lockedUntil,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (pinHash.present) {
+      map['pin_hash'] = Variable<String>(pinHash.value);
+    }
+    if (pinSalt.present) {
+      map['pin_salt'] = Variable<String>(pinSalt.value);
+    }
+    if (kdfIterations.present) {
+      map['kdf_iterations'] = Variable<int>(kdfIterations.value);
+    }
+    if (failedAttempts.present) {
+      map['failed_attempts'] = Variable<int>(failedAttempts.value);
+    }
+    if (lockedUntil.present) {
+      map['locked_until'] = Variable<DateTime>(lockedUntil.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SecurityCredentialsCompanion(')
+          ..write('id: $id, ')
+          ..write('pinHash: $pinHash, ')
+          ..write('pinSalt: $pinSalt, ')
+          ..write('kdfIterations: $kdfIterations, ')
+          ..write('failedAttempts: $failedAttempts, ')
+          ..write('lockedUntil: $lockedUntil, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -7390,6 +7867,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $AssistantMessagesTable(this);
   late final $SmartScansTable smartScans = $SmartScansTable(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
+  late final $SecurityCredentialsTable securityCredentials =
+      $SecurityCredentialsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -7409,6 +7888,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     assistantMessages,
     smartScans,
     appSettings,
+    securityCredentials,
   ];
 }
 
@@ -12128,6 +12608,266 @@ typedef $$AppSettingsTableProcessedTableManager =
       AppSetting,
       PrefetchHooks Function()
     >;
+typedef $$SecurityCredentialsTableCreateCompanionBuilder =
+    SecurityCredentialsCompanion Function({
+      required String id,
+      required String pinHash,
+      required String pinSalt,
+      required int kdfIterations,
+      Value<int> failedAttempts,
+      Value<DateTime?> lockedUntil,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+typedef $$SecurityCredentialsTableUpdateCompanionBuilder =
+    SecurityCredentialsCompanion Function({
+      Value<String> id,
+      Value<String> pinHash,
+      Value<String> pinSalt,
+      Value<int> kdfIterations,
+      Value<int> failedAttempts,
+      Value<DateTime?> lockedUntil,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$SecurityCredentialsTableFilterComposer
+    extends Composer<_$AppDatabase, $SecurityCredentialsTable> {
+  $$SecurityCredentialsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get pinHash => $composableBuilder(
+    column: $table.pinHash,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get pinSalt => $composableBuilder(
+    column: $table.pinSalt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get kdfIterations => $composableBuilder(
+    column: $table.kdfIterations,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get failedAttempts => $composableBuilder(
+    column: $table.failedAttempts,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lockedUntil => $composableBuilder(
+    column: $table.lockedUntil,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SecurityCredentialsTableOrderingComposer
+    extends Composer<_$AppDatabase, $SecurityCredentialsTable> {
+  $$SecurityCredentialsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get pinHash => $composableBuilder(
+    column: $table.pinHash,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get pinSalt => $composableBuilder(
+    column: $table.pinSalt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get kdfIterations => $composableBuilder(
+    column: $table.kdfIterations,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get failedAttempts => $composableBuilder(
+    column: $table.failedAttempts,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lockedUntil => $composableBuilder(
+    column: $table.lockedUntil,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SecurityCredentialsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SecurityCredentialsTable> {
+  $$SecurityCredentialsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get pinHash =>
+      $composableBuilder(column: $table.pinHash, builder: (column) => column);
+
+  GeneratedColumn<String> get pinSalt =>
+      $composableBuilder(column: $table.pinSalt, builder: (column) => column);
+
+  GeneratedColumn<int> get kdfIterations => $composableBuilder(
+    column: $table.kdfIterations,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get failedAttempts => $composableBuilder(
+    column: $table.failedAttempts,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get lockedUntil => $composableBuilder(
+    column: $table.lockedUntil,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$SecurityCredentialsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SecurityCredentialsTable,
+          SecurityCredential,
+          $$SecurityCredentialsTableFilterComposer,
+          $$SecurityCredentialsTableOrderingComposer,
+          $$SecurityCredentialsTableAnnotationComposer,
+          $$SecurityCredentialsTableCreateCompanionBuilder,
+          $$SecurityCredentialsTableUpdateCompanionBuilder,
+          (
+            SecurityCredential,
+            BaseReferences<
+              _$AppDatabase,
+              $SecurityCredentialsTable,
+              SecurityCredential
+            >,
+          ),
+          SecurityCredential,
+          PrefetchHooks Function()
+        > {
+  $$SecurityCredentialsTableTableManager(
+    _$AppDatabase db,
+    $SecurityCredentialsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SecurityCredentialsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SecurityCredentialsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$SecurityCredentialsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> pinHash = const Value.absent(),
+                Value<String> pinSalt = const Value.absent(),
+                Value<int> kdfIterations = const Value.absent(),
+                Value<int> failedAttempts = const Value.absent(),
+                Value<DateTime?> lockedUntil = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SecurityCredentialsCompanion(
+                id: id,
+                pinHash: pinHash,
+                pinSalt: pinSalt,
+                kdfIterations: kdfIterations,
+                failedAttempts: failedAttempts,
+                lockedUntil: lockedUntil,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String pinHash,
+                required String pinSalt,
+                required int kdfIterations,
+                Value<int> failedAttempts = const Value.absent(),
+                Value<DateTime?> lockedUntil = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SecurityCredentialsCompanion.insert(
+                id: id,
+                pinHash: pinHash,
+                pinSalt: pinSalt,
+                kdfIterations: kdfIterations,
+                failedAttempts: failedAttempts,
+                lockedUntil: lockedUntil,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SecurityCredentialsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SecurityCredentialsTable,
+      SecurityCredential,
+      $$SecurityCredentialsTableFilterComposer,
+      $$SecurityCredentialsTableOrderingComposer,
+      $$SecurityCredentialsTableAnnotationComposer,
+      $$SecurityCredentialsTableCreateCompanionBuilder,
+      $$SecurityCredentialsTableUpdateCompanionBuilder,
+      (
+        SecurityCredential,
+        BaseReferences<
+          _$AppDatabase,
+          $SecurityCredentialsTable,
+          SecurityCredential
+        >,
+      ),
+      SecurityCredential,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -12163,4 +12903,6 @@ class $AppDatabaseManager {
       $$SmartScansTableTableManager(_db, _db.smartScans);
   $$AppSettingsTableTableManager get appSettings =>
       $$AppSettingsTableTableManager(_db, _db.appSettings);
+  $$SecurityCredentialsTableTableManager get securityCredentials =>
+      $$SecurityCredentialsTableTableManager(_db, _db.securityCredentials);
 }

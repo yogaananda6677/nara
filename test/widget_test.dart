@@ -14,6 +14,7 @@ import 'package:nara/features/smart_scan/application/scan_gateways.dart';
 import 'package:nara/features/smart_scan/domain/repositories/smart_scan_repository.dart';
 import 'package:nara/features/smart_scan/presentation/providers/smart_scan_providers.dart';
 import 'package:nara/features/assistant/presentation/providers/assistant_providers.dart';
+import 'package:nara/features/settings/presentation/pages/settings_page.dart';
 
 import 'helpers/fake_foundation_repository.dart';
 import 'helpers/fake_assistant_repository.dart';
@@ -66,6 +67,36 @@ void main() {
     expect(repository.preferences.theme.name, 'dark');
     final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
     expect(materialApp.themeMode, ThemeMode.dark);
+  });
+
+  testWidgets('settings tetap dapat digunakan pada text scale 200 persen', (
+    tester,
+  ) async {
+    final repository = FakeFoundationRepository(profile: _profile());
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [foundationRepositoryProvider.overrideWithValue(repository)],
+        child: MaterialApp(
+          home: Scaffold(
+            body: MediaQuery(
+              data: const MediaQueryData(
+                size: Size(360, 800),
+                textScaler: TextScaler.linear(2),
+              ),
+              child: const SettingsPage(),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Pengaturan'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.drag(find.byType(ListView), const Offset(0, -1000));
+    await tester.pumpAndSettle();
+    expect(find.text('Backup lokal'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('berpindah ke halaman keuangan', (tester) async {

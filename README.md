@@ -7,9 +7,9 @@ reminder, aktivitas, Assistant berbasis aturan, dan Smart Scan langsung di
 perangkat Android. Nara V1 dirancang offline-first: tidak memakai backend,
 akun cloud, API AI, atau koneksi internet untuk fitur inti.
 
-> Status V1: Phase 0–5 selesai. Phase 6 (backup terenkripsi, PIN/biometrik,
-> hardening, accessibility, dan acceptance test perangkat nyata) masih perlu
-> diselesaikan sebelum V1 dinyatakan final.
+> Status V1: Phase 0–6 telah diimplementasikan. Quality gate otomatis lulus;
+> acceptance test lengkap pada perangkat nyata masih menjadi gerbang sebelum
+> V1 diberi tag final.
 
 ## Fitur
 
@@ -24,6 +24,8 @@ akun cloud, API AI, atau koneksi internet untuk fitur inti.
   diedit.
 - **Privasi lokal:** SQLite/Drift menjadi source of truth. Gambar dan teks OCR
   mentah tidak disimpan ke database atau dikirim ke server.
+- **Keamanan & recovery:** PIN hash, biometrik sistem, auto-lock, pemeriksaan
+  integritas SQLite, serta backup/restore lokal terenkripsi AES-256-GCM.
 
 ## Batasan saat ini
 
@@ -31,8 +33,9 @@ akun cloud, API AI, atau koneksi internet untuk fitur inti.
   Android; platform lain belum menjadi acceptance target V1.
 - Hasil Smart Scan wajib diperiksa manual sebelum dikonfirmasi, terutama untuk
   gambar buram, reflektif, tulisan tangan, dan layout struk tidak umum.
-- Backup terenkripsi, restore, PIN, biometrik, dan recovery database berada di
-  Phase 6.
+- Password backup tidak dapat dipulihkan oleh Nara. Kredensial PIN/biometrik
+  sengaja tidak disertakan dalam backup dan harus diaktifkan ulang setelah
+  restore.
 - APK dari workflow CD adalah **debug-signed test release**, bukan artefak yang
   siap dikirim ke Google Play.
 
@@ -44,6 +47,7 @@ akun cloud, API AI, atau koneksi internet untuk fitur inti.
 - Flutter Local Notifications
 - Google ML Kit Text Recognition (on-device)
 - Image Picker dan package `image` untuk preprocessing
+- Cryptography (AES-256-GCM/PBKDF2), Local Auth, dan Android Storage Access Framework
 
 ## Persyaratan pengembangan
 
@@ -133,7 +137,7 @@ service Keuangan/Produktivitas yang sama dengan form manual.
 ## CI/CD
 
 - `CI` berjalan pada pull request dan push ke `main`: dependency restore,
-  formatting, analyzer, 48 test, dan build APK debug.
+  formatting, analyzer, 57 test, dan build APK debug.
 - `Android Test Release` berjalan saat tag `v*` didorong. Workflow mengulang
   quality gate, membangun APK debug-signed, mengunggah artifact, dan membuat
   GitHub prerelease untuk pengujian.
@@ -159,6 +163,7 @@ Phase 6 menyelesaikan pengelolaan signing secret dan acceptance test.
 - [Phase 3 — Productivity](docs/PHASE_3_PRODUCTIVITY.md)
 - [Phase 4 — Local Assistant](docs/PHASE_4_LOCAL_ASSISTANT.md)
 - [Phase 5 — Smart Scan](docs/PHASE_5_SMART_SCAN.md)
+- [Phase 6 — Security & Hardening](docs/PHASE_6_SECURITY_HARDENING.md)
 
 ## Berkontribusi
 

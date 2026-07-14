@@ -207,6 +207,19 @@ class AppSettings extends Table {
   Set<Column<Object>> get primaryKey => {key};
 }
 
+class SecurityCredentials extends Table {
+  TextColumn get id => text()();
+  TextColumn get pinHash => text()();
+  TextColumn get pinSalt => text()();
+  IntColumn get kdfIterations => integer()();
+  IntColumn get failedAttempts => integer().withDefault(const Constant(0))();
+  DateTimeColumn get lockedUntil => dateTime().nullable()();
+  DateTimeColumn get updatedAt => dateTime().clientDefault(_utcNow)();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
 @DriftDatabase(
   tables: [
     Profiles,
@@ -223,6 +236,7 @@ class AppSettings extends Table {
     AssistantMessages,
     SmartScans,
     AppSettings,
+    SecurityCredentials,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -231,7 +245,13 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
+
+  Future<bool> integrityCheck() async {
+    final rows = await customSelect('PRAGMA quick_check').get();
+    return rows.isNotEmpty &&
+        rows.every((row) => row.data.values.singleOrNull == 'ok');
+  }
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -254,6 +274,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 5) {
         await migrator.createTable(smartScans);
+      }
+      if (from < 6) {
+        await migrator.createTable(securityCredentials);
       }
     },
     beforeOpen: (details) async {

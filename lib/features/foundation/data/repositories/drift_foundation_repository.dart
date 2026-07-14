@@ -14,6 +14,8 @@ class DriftFoundationRepository implements FoundationRepository {
   static const _timezoneKey = 'timezone';
   static const _themeKey = 'theme';
   static const _appLockKey = 'app_lock_enabled';
+  static const _biometricKey = 'biometric_enabled';
+  static const _lockTimeoutKey = 'lock_timeout_seconds';
 
   @override
   Future<void> initialize() async {
@@ -52,6 +54,8 @@ class DriftFoundationRepository implements FoundationRepository {
           _setting(_timezoneKey, 'Asia/Jakarta', now),
           _setting(_themeKey, ThemePreference.system.name, now),
           _setting(_appLockKey, 'false', now),
+          _setting(_biometricKey, 'false', now),
+          _setting(_lockTimeoutKey, '30', now),
         ], mode: InsertMode.insertOrIgnore);
       });
     });
@@ -102,6 +106,9 @@ class DriftFoundationRepository implements FoundationRepository {
       timezone: settings[_timezoneKey] ?? 'Asia/Jakarta',
       theme: ThemePreference.fromStorage(settings[_themeKey]),
       appLockEnabled: settings[_appLockKey] == 'true',
+      biometricEnabled: settings[_biometricKey] == 'true',
+      lockTimeoutSeconds:
+          int.tryParse(settings[_lockTimeoutKey] ?? '')?.clamp(0, 300) ?? 30,
     );
   }
 
@@ -115,6 +122,12 @@ class DriftFoundationRepository implements FoundationRepository {
         _setting(_timezoneKey, preferences.timezone, now),
         _setting(_themeKey, preferences.theme.name, now),
         _setting(_appLockKey, preferences.appLockEnabled.toString(), now),
+        _setting(_biometricKey, preferences.biometricEnabled.toString(), now),
+        _setting(
+          _lockTimeoutKey,
+          preferences.lockTimeoutSeconds.toString(),
+          now,
+        ),
       ]);
     });
   }

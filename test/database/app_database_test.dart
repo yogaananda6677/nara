@@ -16,8 +16,8 @@ void main() {
     await database.close();
   });
 
-  test('schema database Fase 5 berada pada versi 5', () {
-    expect(database.schemaVersion, 5);
+  test('schema database Fase 6 berada pada versi 6', () {
+    expect(database.schemaVersion, 6);
   });
 
   test('dapat menyimpan account lokal', () async {
@@ -42,13 +42,20 @@ void main() {
     expect(categories, hasLength(12));
     expect(categories.where((item) => item.type == 'expense'), hasLength(8));
     expect(categories.where((item) => item.type == 'income'), hasLength(4));
-    expect(settings, hasLength(5));
+    expect(settings, hasLength(7));
 
     final preferences = await repository.getPreferences();
     expect(preferences.language, 'id');
     expect(preferences.currency, 'IDR');
     expect(preferences.timezone, 'Asia/Jakarta');
     expect(preferences.theme, ThemePreference.system);
+    expect(preferences.appLockEnabled, isFalse);
+    expect(preferences.biometricEnabled, isFalse);
+    expect(preferences.lockTimeoutSeconds, 30);
+  });
+
+  test('pemeriksaan integritas database berhasil', () async {
+    expect(await database.integrityCheck(), isTrue);
   });
 
   test(

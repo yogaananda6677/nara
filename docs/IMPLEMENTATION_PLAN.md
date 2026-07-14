@@ -12,7 +12,7 @@ Plan ini hanya mencakup V1 offline. Integrasi AI/cloud tidak dikerjakan dalam ve
 | Fase 3 — Produktivitas | Selesai |
 | Fase 4 — Assistant lokal | Selesai |
 | Fase 5 — Smart Scan lokal | Selesai |
-| Fase 6 — Backup, security, dan hardening | Belum dimulai |
+| Fase 6 — Backup, security, dan hardening | Implementasi selesai; acceptance perangkat berjalan |
 
 ## Fase 0 — Project baseline
 
@@ -93,6 +93,11 @@ dan quality gate tersedia di `docs/PHASE_5_SMART_SCAN.md`.
 Exit: gambar diproses lokal dan hanya draft terkonfirmasi yang masuk database.
 
 ## Fase 6 — Backup, security, dan hardening
+
+Status: **implementasi selesai pada 14 Juli 2026**. Detail rancangan keamanan,
+recovery, penggunaan, serta bukti quality gate tersedia di
+`docs/PHASE_6_SECURITY_HARDENING.md`. Acceptance pada perangkat nyata tetap
+dicatat terpisah sebelum V1 diberi tag final.
 
 - backup/restore lokal terenkripsi;
 - PIN hash dan biometrik sistem;

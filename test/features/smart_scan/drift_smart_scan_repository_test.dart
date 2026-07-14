@@ -25,7 +25,7 @@ void main() {
       );
 
       final row = await database.select(database.smartScans).getSingle();
-      expect(database.schemaVersion, 5);
+      expect(database.schemaVersion, 6);
       expect(row.extractedAmount, 25000);
       expect(await repository.getStatus('scan-1'), 'pending');
       await repository.markCancelled('scan-1');

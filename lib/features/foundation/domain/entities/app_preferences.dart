@@ -18,6 +18,8 @@ class AppPreferences {
     this.timezone = 'Asia/Jakarta',
     this.theme = ThemePreference.system,
     this.appLockEnabled = false,
+    this.biometricEnabled = false,
+    this.lockTimeoutSeconds = 30,
   });
 
   final String language;
@@ -25,6 +27,8 @@ class AppPreferences {
   final String timezone;
   final ThemePreference theme;
   final bool appLockEnabled;
+  final bool biometricEnabled;
+  final int lockTimeoutSeconds;
 
   AppPreferences copyWith({
     String? language,
@@ -32,6 +36,8 @@ class AppPreferences {
     String? timezone,
     ThemePreference? theme,
     bool? appLockEnabled,
+    bool? biometricEnabled,
+    int? lockTimeoutSeconds,
   }) {
     return AppPreferences(
       language: language ?? this.language,
@@ -39,6 +45,8 @@ class AppPreferences {
       timezone: timezone ?? this.timezone,
       theme: theme ?? this.theme,
       appLockEnabled: appLockEnabled ?? this.appLockEnabled,
+      biometricEnabled: biometricEnabled ?? this.biometricEnabled,
+      lockTimeoutSeconds: lockTimeoutSeconds ?? this.lockTimeoutSeconds,
     );
   }
 }

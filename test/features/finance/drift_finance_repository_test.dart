@@ -104,6 +104,39 @@ void main() {
     expect(snapshot.savingGoals.single.savedAmount, 250000);
     expect(snapshot.savingGoals.single.progress, 0.25);
   });
+
+  test('target tabungan terkait akun mengikuti saldo dompet', () async {
+    final now = DateTime.now().toUtc();
+    await repository.saveAccount(_account('cash', 100000));
+    await repository.saveTransaction(
+      _transaction(
+        id: 'income-1',
+        accountId: 'cash',
+        categoryId: 'income',
+        type: FinanceTransactionType.income,
+        amount: 50000,
+        date: now,
+      ),
+    );
+    await repository.saveSavingGoal(
+      domain.SavingGoal(
+        id: 'goal',
+        accountId: 'cash',
+        name: 'Dana darurat',
+        targetAmount: 200000,
+        savedAmount: 0,
+        targetDate: null,
+        isCompleted: false,
+        createdAt: now,
+        updatedAt: now,
+      ),
+    );
+
+    final snapshot = await repository.loadSnapshot(month: now);
+
+    expect(snapshot.savingGoals.single.savedAmount, 150000);
+    expect(snapshot.savingGoals.single.progress, 0.75);
+  });
 }
 
 Future<void> _seedCategories(AppDatabase database) async {

@@ -82,7 +82,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
           onRefresh: () =>
               ref.read(productivityControllerProvider.notifier).refresh(),
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+            padding: const EdgeInsets.fromLTRB(20, 22, 20, 100),
             children: [
               Center(
                 child: ConstrainedBox(
@@ -92,7 +92,8 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                     children: [
                       Text(
                         'Task',
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(color: const Color(0xFF001B3D)),
                       ),
                       Text(
                         'Atur prioritas, deadline, subtask, dan reminder offline',
@@ -183,9 +184,9 @@ class _TaskSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-    color: Theme.of(context).colorScheme.primaryContainer,
+    color: Theme.of(context).colorScheme.surfaceContainerLow,
     child: Padding(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(20),
       child: Row(
         children: [
           Expanded(
@@ -251,8 +252,9 @@ class _TaskCard extends StatelessWidget {
         item.dueDate!.isBefore(DateTime.now()) &&
         !item.isCompleted;
     return Card(
+      margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        contentPadding: const EdgeInsets.fromLTRB(8, 6, 4, 6),
+        contentPadding: const EdgeInsets.fromLTRB(10, 10, 4, 10),
         leading: Checkbox(
           value: item.isCompleted,
           onChanged: (_) => onToggle(),
@@ -263,7 +265,7 @@ class _TaskCard extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             decoration: item.isCompleted ? TextDecoration.lineThrough : null,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w800,
           ),
         ),
         subtitle: Wrap(

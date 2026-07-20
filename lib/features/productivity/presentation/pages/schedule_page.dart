@@ -66,7 +66,7 @@ class SchedulePage extends ConsumerWidget {
             onRefresh: () =>
                 ref.read(productivityControllerProvider.notifier).refresh(),
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
+              padding: const EdgeInsets.fromLTRB(20, 22, 20, 100),
               children: [
                 Center(
                   child: ConstrainedBox(
@@ -76,7 +76,8 @@ class SchedulePage extends ConsumerWidget {
                       children: [
                         Text(
                           'Jadwal & Aktivitas',
-                          style: Theme.of(context).textTheme.headlineMedium,
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(color: const Color(0xFF001B3D)),
                         ),
                         const Text(
                           'Agenda dan catatan aktivitas tersimpan di perangkat',
@@ -194,31 +195,41 @@ class _DayPicker extends StatelessWidget {
   final VoidCallback onNext;
   @override
   Widget build(BuildContext context) => Card(
-    color: Theme.of(context).colorScheme.primaryContainer,
-    child: Row(
-      children: [
-        IconButton(
-          onPressed: onPrevious,
-          tooltip: 'Hari sebelumnya',
-          icon: const Icon(Icons.chevron_left),
-        ),
-        Expanded(
-          child: Column(
-            children: [
-              Text(
-                DateFormat('EEEE', 'id_ID').format(day),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Text(DateFormat('d MMMM yyyy', 'id_ID').format(day)),
-            ],
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: onPrevious,
+            tooltip: 'Hari sebelumnya',
+            icon: const Icon(Icons.chevron_left),
           ),
-        ),
-        IconButton(
-          onPressed: onNext,
-          tooltip: 'Hari berikutnya',
-          icon: const Icon(Icons.chevron_right),
-        ),
-      ],
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  DateFormat('EEEE', 'id_ID').format(day),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  DateFormat('d MMMM yyyy', 'id_ID').format(day),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: onNext,
+            tooltip: 'Hari berikutnya',
+            icon: const Icon(Icons.chevron_right),
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -241,7 +252,7 @@ class _Section extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
     child: Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -282,11 +293,24 @@ class _ScheduleTile extends StatelessWidget {
   final VoidCallback onDelete;
   @override
   Widget build(BuildContext context) => ListTile(
-    contentPadding: EdgeInsets.zero,
+    contentPadding: const EdgeInsets.symmetric(vertical: 4),
     leading: CircleAvatar(
-      child: Text(DateFormat('HH:mm').format(item.startAt.toLocal())),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      child: Text(
+        DateFormat('HH:mm').format(item.startAt.toLocal()),
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.secondary,
+          fontSize: 11,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
     ),
-    title: Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+    title: Text(
+      item.title,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(fontWeight: FontWeight.w800),
+    ),
     subtitle: Text(
       '${DateFormat('HH:mm').format(item.startAt.toLocal())}–${DateFormat('HH:mm').format(item.endAt.toLocal())}${item.location == null ? '' : ' • ${item.location}'}',
       maxLines: 1,

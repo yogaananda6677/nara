@@ -513,6 +513,7 @@ class _SavingGoalFormSheetState extends State<SavingGoalFormSheet> {
   late final TextEditingController _savedController;
   String? _accountId;
   DateTime? _targetDate;
+  bool get _usesLinkedAccount => _accountId != null;
 
   @override
   void initState() {
@@ -554,7 +555,9 @@ class _SavingGoalFormSheetState extends State<SavingGoalFormSheet> {
       SavingGoalInput(
         name: _nameController.text,
         targetAmount: CurrencyFormatter.parse(_targetController.text)!,
-        savedAmount: CurrencyFormatter.parse(_savedController.text) ?? 0,
+        savedAmount: _usesLinkedAccount
+            ? 0
+            : CurrencyFormatter.parse(_savedController.text) ?? 0,
         accountId: _accountId,
         targetDate: _targetDate,
       ),
@@ -593,28 +596,10 @@ class _SavingGoalFormSheetState extends State<SavingGoalFormSheet> {
               validator: _moneyPositive,
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              controller: _savedController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Sudah terkumpul',
-                prefixText: 'Rp ',
-                prefixIcon: Icon(Icons.account_balance_outlined),
-              ),
-              validator: (value) {
-                final saved = CurrencyFormatter.parse(value ?? '') ?? 0;
-                final target = CurrencyFormatter.parse(_targetController.text);
-                if (target != null && saved > target) {
-                  return 'Dana terkumpul melebihi target.';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               initialValue: _accountId ?? '',
               decoration: const InputDecoration(
-                labelText: 'Akun terkait (opsional)',
+                labelText: 'Hubungkan ke akun/dompet (opsional)',
                 prefixIcon: Icon(Icons.account_balance_wallet_outlined),
               ),
               items: [
@@ -629,12 +614,42 @@ class _SavingGoalFormSheetState extends State<SavingGoalFormSheet> {
                   ),
                 ),
               ],
-              onChanged: (value) => setState(
-                () =>
-                    _accountId = value == null || value.isEmpty ? null : value,
-              ),
+              onChanged: (value) {
+                setState(() {
+                  _accountId = value == null || value.isEmpty ? null : value;
+                  if (_usesLinkedAccount) _savedController.text = '0';
+                });
+              },
             ),
             const SizedBox(height: 16),
+            if (!_usesLinkedAccount) ...[
+              TextFormField(
+                controller: _savedController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Sudah terkumpul',
+                  prefixText: 'Rp ',
+                  prefixIcon: Icon(Icons.account_balance_outlined),
+                ),
+                validator: (value) {
+                  final saved = CurrencyFormatter.parse(value ?? '') ?? 0;
+                  final target = CurrencyFormatter.parse(
+                    _targetController.text,
+                  );
+                  if (target != null && saved > target) {
+                    return 'Dana terkumpul melebihi target.';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+            ] else ...[
+              _LinkedAccountNotice(
+                accountId: _accountId!,
+                snapshot: widget.snapshot,
+              ),
+              const SizedBox(height: 16),
+            ],
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.event_outlined),
@@ -649,6 +664,45 @@ class _SavingGoalFormSheetState extends State<SavingGoalFormSheet> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _LinkedAccountNotice extends StatelessWidget {
+  const _LinkedAccountNotice({required this.accountId, required this.snapshot});
+
+  final String accountId;
+  final FinanceSnapshot snapshot;
+
+  @override
+  Widget build(BuildContext context) {
+    final account = snapshot.accounts
+        .where((item) => item.account.id == accountId)
+        .firstOrNull;
+    final colors = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: colors.secondaryContainer.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.link, color: colors.secondary),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              account == null
+                  ? 'Progress tabungan akan mengikuti saldo akun terkait.'
+                  : 'Progress mengikuti saldo ${account.account.name}: ${CurrencyFormatter.rupiah(account.balance)}.',
+              style: TextStyle(
+                color: colors.onSecondaryContainer,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

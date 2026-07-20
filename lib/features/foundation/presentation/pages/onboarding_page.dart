@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nara/core/result/result.dart';
 import 'package:nara/features/foundation/presentation/providers/foundation_providers.dart';
+import 'package:nara/shared/widgets/nara_logo.dart';
 
 class OnboardingPage extends ConsumerStatefulWidget {
   const OnboardingPage({super.key});
@@ -59,11 +60,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Icon(
-                      Icons.auto_awesome,
-                      size: 64,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    const Center(child: NaraLogo(size: 82, padding: 10)),
                     const SizedBox(height: 20),
                     Text(
                       'Selamat datang di Nara',

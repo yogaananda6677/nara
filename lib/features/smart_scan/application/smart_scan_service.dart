@@ -59,7 +59,8 @@ class SmartScanService {
     ProcessedScanImage? processed;
     try {
       processed = await _preprocessor.process(imagePath);
-      final rawText = await _ocrEngine.recognize(processed.path);
+      final ocr = await _ocrEngine.recognize(processed.path);
+      final rawText = ocr.text;
       if (rawText.trim().isEmpty) {
         await _saveFailure(id, source, ScanDocumentType.nonFinancial);
         return Failure(
@@ -71,7 +72,7 @@ class SmartScanService {
         );
       }
       final classification = _classifier.classify(rawText);
-      final parsed = _parser.parse(rawText, classification);
+      final parsed = _parser.parseOcr(ocr, classification);
       final draft = SmartScanDraft(
         id: id,
         source: source,
@@ -82,6 +83,7 @@ class SmartScanService {
         amount: parsed.amount,
         date: parsed.date,
         merchant: parsed.merchant,
+        suggestedTransactionType: parsed.suggestedTransactionType,
         categorySuggestion: parsed.category,
         warnings: parsed.warnings,
       );

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:nara/core/formatters/currency_formatter.dart';
 import 'package:nara/features/assistant/domain/entities/assistant_entities.dart';
 import 'package:nara/features/assistant/presentation/providers/assistant_providers.dart';
+import 'package:nara/shared/widgets/nara_logo.dart';
 
 class AssistantPage extends ConsumerStatefulWidget {
   const AssistantPage({super.key});
@@ -69,7 +70,7 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
                   Expanded(
                     child: ListView(
                       controller: _scroll,
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                      padding: const EdgeInsets.fromLTRB(18, 16, 18, 24),
                       children: [
                         if (state.messages.length <= 1)
                           _Examples(onSelect: _send),
@@ -151,44 +152,56 @@ class _Header extends StatelessWidget {
   final VoidCallback? onClear;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(16, 12, 8, 8),
-    child: Row(
-      children: [
-        CircleAvatar(
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          child: Icon(
-            Icons.auto_awesome,
-            color: Theme.of(context).colorScheme.primary,
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 14, 10, 8),
+      child: Row(
+        children: [
+          NaraLogo(
+            size: 48,
+            padding: 5,
+            backgroundColor: colors.surfaceContainerLow,
           ),
-        ),
-        const SizedBox(width: 12),
-        const Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Asisten Nara',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
-              ),
-              Row(
-                children: [
-                  Icon(Icons.offline_bolt, size: 14, color: Colors.green),
-                  SizedBox(width: 4),
-                  Text('Lokal • Offline', style: TextStyle(fontSize: 12)),
-                ],
-              ),
-            ],
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Nara',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: colors.primary,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  children: [
+                    Icon(Icons.offline_bolt, size: 14, color: colors.tertiary),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Asisten lokal V1',
+                      style: TextStyle(
+                        color: colors.onSurfaceVariant,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        IconButton(
-          onPressed: onClear,
-          tooltip: 'Hapus riwayat chat',
-          icon: const Icon(Icons.delete_sweep_outlined),
-        ),
-      ],
-    ),
-  );
+          IconButton(
+            onPressed: onClear,
+            tooltip: 'Hapus riwayat chat',
+            icon: const Icon(Icons.delete_sweep_outlined),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _Examples extends StatelessWidget {
@@ -196,14 +209,50 @@ class _Examples extends StatelessWidget {
   final ValueChanged<String> onSelect;
 
   @override
-  Widget build(BuildContext context) => Card(
-    child: Padding(
-      padding: const EdgeInsets.all(16),
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: colors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: colors.outlineVariant.withValues(alpha: 0.6)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF001B3D).withValues(alpha: 0.06),
+            blurRadius: 30,
+            offset: const Offset(0, 16),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Coba perintah', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 10),
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: colors.secondaryContainer.withValues(alpha: 0.7),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.tips_and_updates_outlined,
+                  color: colors.secondary,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Coba perintah cepat',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -224,8 +273,8 @@ class _Examples extends StatelessWidget {
           ),
         ],
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _MessageBubble extends StatelessWidget {
@@ -245,17 +294,34 @@ class _MessageBubble extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 5),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
           decoration: BoxDecoration(
-            color: user ? colors.primary : colors.surfaceContainerHighest,
+            color: user ? const Color(0xFFDDE9FF) : colors.surfaceContainerLow,
+            boxShadow: user
+                ? null
+                : [
+                    BoxShadow(
+                      color: const Color(0xFF001B3D).withValues(alpha: 0.05),
+                      blurRadius: 24,
+                      offset: const Offset(0, 12),
+                    ),
+                  ],
             borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(18),
-              topRight: const Radius.circular(18),
-              bottomLeft: Radius.circular(user ? 18 : 4),
-              bottomRight: Radius.circular(user ? 4 : 18),
+              topLeft: const Radius.circular(26),
+              topRight: const Radius.circular(26),
+              bottomLeft: Radius.circular(user ? 26 : 8),
+              bottomRight: Radius.circular(user ? 8 : 26),
             ),
+            border: user
+                ? null
+                : Border.all(
+                    color: colors.outlineVariant.withValues(alpha: 0.45),
+                  ),
           ),
           child: Text(
             message.content,
-            style: TextStyle(color: user ? colors.onPrimary : null),
+            style: TextStyle(
+              color: user ? colors.primary : colors.onSurface,
+              height: 1.35,
+            ),
           ),
         ),
       ),
@@ -279,7 +345,9 @@ class _PreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-    color: Theme.of(context).colorScheme.primaryContainer,
+    color: Theme.of(
+      context,
+    ).colorScheme.secondaryContainer.withValues(alpha: 0.45),
     child: Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -358,15 +426,33 @@ class _Composer extends StatelessWidget {
   final VoidCallback onSend;
 
   @override
-  Widget build(BuildContext context) => Material(
-    elevation: 3,
-    child: SafeArea(
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return SafeArea(
       top: false,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 10, 14, 14),
+        decoration: BoxDecoration(
+          color: colors.surface.withValues(alpha: 0.96),
+          border: Border(
+            top: BorderSide(
+              color: colors.outlineVariant.withValues(alpha: 0.55),
+            ),
+          ),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            IconButton.filled(
+              onPressed: null,
+              tooltip: 'Voice assistant hadir di V2',
+              style: IconButton.styleFrom(
+                disabledBackgroundColor: colors.secondaryContainer,
+                disabledForegroundColor: colors.secondary,
+              ),
+              icon: const Icon(Icons.mic_none_rounded),
+            ),
+            const SizedBox(width: 8),
             Expanded(
               child: TextField(
                 key: const ValueKey('assistant-input'),
@@ -376,9 +462,8 @@ class _Composer extends StatelessWidget {
                 maxLines: 4,
                 maxLength: 500,
                 decoration: const InputDecoration(
-                  hintText: 'Ketik perintah offline…',
+                  hintText: 'Ketik pesan untuk Nara...',
                   counterText: '',
-                  prefixIcon: Icon(Icons.lock_outline),
                 ),
                 onSubmitted: (_) => onSend(),
               ),
@@ -393,8 +478,8 @@ class _Composer extends StatelessWidget {
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _EditDraftDialog extends StatefulWidget {

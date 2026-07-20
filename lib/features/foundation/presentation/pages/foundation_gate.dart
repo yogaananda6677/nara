@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nara/features/foundation/presentation/pages/onboarding_page.dart';
 import 'package:nara/features/foundation/presentation/providers/foundation_providers.dart';
 import 'package:nara/features/home/presentation/pages/home_page.dart';
+import 'package:nara/shared/widgets/nara_logo.dart';
 
 class FoundationGate extends ConsumerWidget {
   const FoundationGate({super.key});
@@ -34,7 +35,7 @@ class _FoundationLoading extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.auto_awesome, size: 48),
+            NaraLogo(size: 64, padding: 8),
             SizedBox(height: 20),
             CircularProgressIndicator(),
             SizedBox(height: 12),

@@ -39,7 +39,7 @@ dependencies:
   drift: ^2.34.1
   drift_flutter: ^0.3.1
   intl: ^0.20.3
-  uuid: ^4.5.3
+  uuid: ^4.6.0
   flutter_local_notifications: ^20.1.0
   timezone: ^0.10.1
   image_picker: ^1.2.3

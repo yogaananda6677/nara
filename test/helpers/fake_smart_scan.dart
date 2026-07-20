@@ -57,5 +57,6 @@ class FakeScanOcrEngine implements ScanOcrEngine {
   final String text;
 
   @override
-  Future<String> recognize(String imagePath) async => text;
+  Future<OcrTextResult> recognize(String imagePath) async =>
+      OcrTextResult.fromText(text);
 }

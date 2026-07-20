@@ -44,9 +44,9 @@ class DashboardPage extends ConsumerWidget {
       builder: (context, constraints) => ListView(
         padding: EdgeInsets.fromLTRB(
           constraints.maxWidth >= 800 ? 32 : 20,
-          16,
+          22,
           constraints.maxWidth >= 800 ? 32 : 20,
-          32,
+          120,
         ),
         children: [
           Center(
@@ -63,18 +63,25 @@ class DashboardPage extends ConsumerWidget {
                           children: [
                             Text(
                               'Halo, $userName',
-                              style: textTheme.titleMedium,
+                              style: textTheme.headlineMedium?.copyWith(
+                                color: const Color(0xFF001B3D),
+                              ),
                             ),
-                            const SizedBox(height: 2),
+                            const SizedBox(height: 6),
                             Text(
-                              assistantName,
-                              style: textTheme.headlineMedium,
+                              'Siap untuk hari yang produktif bersama $assistantName.',
+                              style: textTheme.titleMedium?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ],
                         ),
                       ),
                       const _OfflineBadge(),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 8),
                       IconButton(
                         key: const ValueKey('open-settings'),
                         onPressed: onOpenSettings,
@@ -83,7 +90,7 @@ class DashboardPage extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 28),
                   _FinanceOverview(
                     summary:
                         financeSummary ??
@@ -94,7 +101,7 @@ class DashboardPage extends ConsumerWidget {
                         ),
                   ),
                   const SizedBox(height: 28),
-                  Text('Menu utama', style: textTheme.titleLarge),
+                  Text('Akses cepat', style: textTheme.titleLarge),
                   const SizedBox(height: 12),
                   _MainMenuGrid(
                     onOpenFinance: onOpenFinance,
@@ -102,7 +109,7 @@ class DashboardPage extends ConsumerWidget {
                     onOpenTasks: onOpenTasks,
                     onOpenSmartScan: onOpenSmartScan,
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 30),
                   Row(
                     children: [
                       Expanded(
@@ -143,7 +150,7 @@ class DashboardPage extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 18),
                   _ReminderCard(
                     summary:
                         productivitySummary ??
@@ -154,7 +161,7 @@ class DashboardPage extends ConsumerWidget {
                           todayActivityMinutes: 0,
                         ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -205,18 +212,42 @@ class _ReminderCard extends StatelessWidget {
     final label = reminder == null
         ? 'Belum ada reminder berikutnya'
         : 'Reminder berikutnya: ${reminder.day}/${reminder.month} • ${reminder.hour.toString().padLeft(2, '0')}:${reminder.minute.toString().padLeft(2, '0')}';
+    final colors = Theme.of(context).colorScheme;
     return Card(
-      child: ListTile(
-        leading: Icon(
-          Icons.notifications_active_outlined,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        title: const Text(
-          'Produktivitas hari ini',
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
-        subtitle: Text(
-          '$label • ${summary.todayActivityMinutes} menit aktivitas',
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: colors.secondaryContainer.withValues(alpha: 0.55),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.notifications_active_outlined,
+                color: colors.secondary,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Produktivitas hari ini',
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '$label • ${summary.todayActivityMinutes} menit aktivitas',
+                    style: TextStyle(color: colors.onSurfaceVariant),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -230,44 +261,74 @@ class _FinanceOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF9E1B1B), Color(0xFFE53935)],
+          colors: [Color(0xFF001B3D), Color(0xFF005F73)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(34),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.primary.withValues(alpha: 0.22),
-            blurRadius: 24,
-            offset: const Offset(0, 10),
+            color: const Color(0xFF001B3D).withValues(alpha: 0.18),
+            blurRadius: 32,
+            offset: const Offset(0, 18),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Total saldo', style: TextStyle(color: Colors.white70)),
-          SizedBox(height: 6),
+          Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  'TOTAL SALDO',
+                  style: TextStyle(
+                    color: Color(0xFFAED7E4),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 7,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.16),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: const Text(
+                  'Lokal',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
           Text(
             CurrencyFormatter.rupiah(summary.totalBalance),
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 30,
-              fontWeight: FontWeight.w800,
+              fontSize: 34,
+              fontWeight: FontWeight.w900,
+              height: 1.12,
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 26),
           Row(
             children: [
               Expanded(
                 child: _BalanceDetail(
-                  icon: Icons.south_west,
+                  icon: Icons.trending_up,
                   label: 'Pemasukan',
                   value: CurrencyFormatter.rupiah(summary.monthlyIncome),
                 ),
@@ -275,7 +336,7 @@ class _FinanceOverview extends StatelessWidget {
               SizedBox(width: 16),
               Expanded(
                 child: _BalanceDetail(
-                  icon: Icons.north_east,
+                  icon: Icons.trending_down,
                   label: 'Pengeluaran',
                   value: CurrencyFormatter.rupiah(summary.monthlyExpense),
                 ),
@@ -357,10 +418,10 @@ class _MainMenuGrid extends StatelessWidget {
       builder: (context, constraints) {
         final itemWidth = constraints.maxWidth >= 700
             ? 210.0
-            : (constraints.maxWidth - 20) / 3;
+            : (constraints.maxWidth - 14) / 2;
         return Wrap(
-          spacing: 10,
-          runSpacing: 10,
+          spacing: 14,
+          runSpacing: 14,
           children: [
             SizedBox(
               width: itemWidth,
@@ -424,26 +485,28 @@ class _DashboardMenu extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(28),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: Column(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+          child: Row(
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(16),
+                  color: colorScheme.secondaryContainer.withValues(alpha: 0.7),
+                  shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: colorScheme.primary),
+                child: Icon(icon, color: colorScheme.secondary),
               ),
-              const SizedBox(height: 10),
-              Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.w700),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
               ),
             ],
           ),
@@ -466,12 +529,21 @@ class _TodayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            Icon(icon, color: Theme.of(context).colorScheme.primary),
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: colors.primaryContainer.withValues(alpha: 0.7),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: colors.primary, size: 20),
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -482,7 +554,9 @@ class _TodayCard extends StatelessWidget {
                     label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colors.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
@@ -506,7 +580,9 @@ class _OfflineBadge extends StatelessWidget {
         label: const Text('Offline'),
         visualDensity: VisualDensity.compact,
         side: BorderSide.none,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: Theme.of(
+          context,
+        ).colorScheme.secondaryContainer.withValues(alpha: 0.62),
       ),
     );
   }

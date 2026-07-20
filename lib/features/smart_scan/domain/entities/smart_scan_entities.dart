@@ -1,3 +1,5 @@
+import 'package:nara/features/finance/domain/entities/finance_transaction.dart';
+
 enum ScanSource {
   camera,
   gallery;
@@ -33,6 +35,7 @@ class SmartScanDraft {
     required this.rawText,
     required this.amount,
     required this.date,
+    required this.suggestedTransactionType,
     required this.categorySuggestion,
     required this.warnings,
     this.merchant,
@@ -46,6 +49,7 @@ class SmartScanDraft {
   final String rawText;
   final int? amount;
   final DateTime date;
+  final FinanceTransactionType suggestedTransactionType;
   final String? merchant;
   final String categorySuggestion;
   final List<String> warnings;

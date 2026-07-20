@@ -82,11 +82,17 @@ class DriftFinanceRepository implements FinanceRepository {
       return haystack.contains(normalizedSearch);
     }).toList()..sort((a, b) => b.date.compareTo(a.date));
 
+    final balanceByAccountId = {
+      for (final item in accountBalances) item.account.id: item.balance,
+    };
+
     return FinanceSnapshot(
       accounts: accountBalances,
       categories: categoryRows.map(_category).toList(),
       transactions: filteredTransactions.map(_transaction).toList(),
-      savingGoals: savingRows.map(_savingGoal).toList(),
+      savingGoals: savingRows
+          .map((row) => _savingGoal(row, balanceByAccountId))
+          .toList(),
       summary: FinanceSummary(
         totalBalance: accountBalances.fold(
           0,
@@ -371,15 +377,21 @@ class DriftFinanceRepository implements FinanceRepository {
     );
   }
 
-  static domain.SavingGoal _savingGoal(db.SavingGoal row) {
+  static domain.SavingGoal _savingGoal(
+    db.SavingGoal row,
+    Map<String, int> balanceByAccountId,
+  ) {
+    final syncedAmount = row.accountId == null
+        ? row.savedAmount
+        : balanceByAccountId[row.accountId] ?? row.savedAmount;
     return domain.SavingGoal(
       id: row.id,
       accountId: row.accountId,
       name: row.name,
       targetAmount: row.targetAmount,
-      savedAmount: row.savedAmount,
+      savedAmount: syncedAmount,
       targetDate: row.targetDate,
-      isCompleted: row.isCompleted,
+      isCompleted: syncedAmount >= row.targetAmount,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     );

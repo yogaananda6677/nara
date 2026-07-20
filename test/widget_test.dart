@@ -138,8 +138,8 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('nav-assistant')));
     await tester.pumpAndSettle();
 
-    expect(find.text('Asisten Nara'), findsOneWidget);
-    expect(find.text('Lokal • Offline'), findsOneWidget);
+    expect(find.text('Nara'), findsOneWidget);
+    expect(find.text('Asisten lokal V1'), findsOneWidget);
     expect(find.byKey(const ValueKey('assistant-input')), findsOneWidget);
   });
 
@@ -180,7 +180,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byKey(const ValueKey('nara-bottom-bar')), findsOneWidget);
     expect(find.byType(NavigationRail), findsNothing);
     await tester.tap(find.byKey(const ValueKey('nav-finance')));
     await tester.pumpAndSettle();

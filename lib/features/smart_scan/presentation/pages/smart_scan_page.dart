@@ -219,7 +219,7 @@ class _DraftViewState extends ConsumerState<_DraftView> {
       text: widget.draft.amount?.toString() ?? '',
     );
     _merchant = TextEditingController(text: widget.draft.merchant);
-    _type = FinanceTransactionType.expense;
+    _type = widget.draft.suggestedTransactionType;
     _date = widget.draft.date;
     _accountId = widget.finance.accounts.first.account.id;
     _selectSuggestedCategory();
